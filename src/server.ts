@@ -1,0 +1,28 @@
+import express from 'express' 
+import colors from 'colors'
+import morgan from 'morgan'
+import { db } from './config/db'
+
+async function connectDB() {
+    try {
+        await db.authenticate()
+        db.sync() // Nos crea las tablas y las columnas en automatico
+        console.log(colors.blue.bold('Conexión exitosa a la DB'));
+        
+    } catch (error) {
+        //console.log(error);
+        console.log(colors.red.bold('Falló la conexion a la DB'));       
+    }
+}
+
+connectDB()
+
+const app = express()
+
+app.use(morgan('dev'))
+
+app.use(express.json())
+
+
+
+export default app
