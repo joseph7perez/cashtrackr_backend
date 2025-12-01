@@ -1,10 +1,24 @@
 import type { Request, Response } from "express";
 import Budget from "../models/Budget";
+import { param } from "express-validator";
 
 export class BudgetController {
 
     static getAll = async (req: Request, res: Response) => {
-        console.log('Desde /api/budgets');
+        try {
+            const budgets = await Budget.findAll({
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                // TODO: Filtrar por el usuario autenticado
+            })
+
+            res.json(budgets)
+        } catch (error) {
+            //console.log(error);
+            res.status(500).json({error: 'Hubo un Error '})
+            
+        }
     }
 
     static create = async (req: Request, res: Response) => {
@@ -21,7 +35,21 @@ export class BudgetController {
     }
 
     static getById = async (req: Request, res: Response) => {
-        console.log('Desde /api/budgets getById');
+        
+        const { id } = req.params
+        try {
+            const budget = await Budget.findByPk(id)
+                
+            if(!budget) {
+                const error = new Error('Presupuesto no encontrado')
+                return res.status(404).json({error: error.message})
+            }
+            res.json(budget)
+        } catch (error) {
+            //console.log(error);
+            res.status(500).json({error: 'Hubo un Error '})
+            
+        }
     }
 
     static updateById = async (req: Request, res: Response) => {
