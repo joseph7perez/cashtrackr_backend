@@ -16,8 +16,7 @@ export class BudgetController {
             res.json(budgets)
         } catch (error) {
             //console.log(error);
-            res.status(500).json({error: 'Hubo un Error '})
-            
+            res.status(500).json({error: 'Hubo un Error '})      
         }
     }
 
@@ -29,8 +28,7 @@ export class BudgetController {
             res.status(201).json('Presupuesto Creado Correctamente')
         } catch (error) {
             //console.log(error);
-            res.status(500).json({error: 'Hubo un Error '})
-            
+            res.status(500).json({error: 'Hubo un Error '})     
         }
     }
 
@@ -47,8 +45,7 @@ export class BudgetController {
             res.json(budget)
         } catch (error) {
             //console.log(error);
-            res.status(500).json({error: 'Hubo un Error '})
-            
+            res.status(500).json({error: 'Hubo un Error '})     
         }
     }
 
@@ -73,6 +70,21 @@ export class BudgetController {
     }
 
     static deleteById = async (req: Request, res: Response) => {
-        console.log('Desde /api/budgets deleteById');
+        const { id } = req.params
+        try {
+            const budget = await Budget.findByPk(id)
+                
+            if(!budget) {
+                const error = new Error('Presupuesto no encontrado')
+                return res.status(404).json({error: error.message})
+            }
+            await budget.destroy() //destroy para eliminarlo de la BD
+
+            res.json('Presupuesto eliminado correctamente')
+
+        } catch (error) {
+            //console.log(error);
+            res.status(500).json({error: 'Hubo un Error '})   
+        }
     }
 }
