@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import Budget from "../models/Budget";
 import { param } from "express-validator";
+import Expense from "../models/Expense";
 
 export class BudgetController {
 
@@ -33,7 +34,12 @@ export class BudgetController {
     }
 
     static getById = async (req: Request, res: Response) => {
-        res.json(req.budget)
+        // Traer el presupuesto con los gastos relacionados
+        const budget = await Budget.findByPk(req.budget.id, {
+            include: [Expense]
+        })
+
+        res.json(budget)
     }
 
     static updateById = async (req: Request, res: Response) => {
