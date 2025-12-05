@@ -4,6 +4,7 @@ import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import { validateBudgetExists, validateBudgetId, validateBudgetInput } from "../middleware/budget";
 import { ExpenseController } from "../controllers/ExpenseController";
+import { validateExpenseInput } from "../middleware/expense";
 
 const router = Router()
 
@@ -14,6 +15,7 @@ router.get('/', BudgetController.getAll)
 
 router.post('/', 
     validateBudgetInput,
+    handleInputErrors,
     BudgetController.create
 )
 
@@ -21,6 +23,7 @@ router.get('/:budgetId', BudgetController.getById)
 
 router.put('/:budgetId', 
     validateBudgetInput,
+    handleInputErrors,
     BudgetController.updateById
 )
 
@@ -30,10 +33,20 @@ router.delete('/:budgetId', BudgetController.deleteById)
 
 //api/budgets/100/espenses/100
 
-router.get('/:budgetId/expenses', ExpenseController.getAll)
-router.post('/:budgetId/expenses', ExpenseController.create)
+router.post('/:budgetId/expenses', 
+    validateExpenseInput,
+    handleInputErrors,
+    ExpenseController.create
+)
+
 router.get('/:budgetId/expenses/:expenseId', ExpenseController.getById)
-router.put('/:budgetId/expenses/:expenseId', ExpenseController.updateById)
+
+router.put('/:budgetId/expenses/:expenseId', 
+    validateExpenseInput,
+    handleInputErrors,
+    ExpenseController.updateById
+)
+
 router.delete('/:budgetId/expenses/:expenseId', ExpenseController.deleteById)
 
 
