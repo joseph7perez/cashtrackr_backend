@@ -18,15 +18,18 @@ export class ExpenseController {
     }
   
     static getById = async (req: Request, res: Response) => {
-        console.log('Desde getById ');
+        res.json(req.expense)
         
     }
 
     static updateById = async (req: Request, res: Response) => {
- 
+        //Escribir los cambios del body
+        await req.expense.update(req.body)
+        res.json('Gasto actualizado correctamente')
     }
   
     static deleteById = async (req: Request, res: Response) => {
-
+        await req.expense.destroy() //destroy() para eliminarlo de la BD
+        res.json('Gasto eliminado correctamente')
     }
 }
