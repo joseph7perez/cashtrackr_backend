@@ -18,7 +18,8 @@ export class ExpenseController {
     }
   
     static getById = async (req: Request, res: Response) => {
-
+        console.log('Desde getById ');
+        
     }
 
     static updateById = async (req: Request, res: Response) => {
