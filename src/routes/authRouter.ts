@@ -9,7 +9,21 @@ import { AuthController } from "../controllers/AuthController";
 
 const router = Router()
 
-router.post('/create-account', AuthController.createAccount)
+router.post('/create-account', 
+    body('name')        
+        .notEmpty().withMessage('El nombre no puede estar vacio'),
+    body('email')
+        .isEmail().withMessage('El formato del correo no es válido'),
+    body('password')
+        .isLength({min: 8}).withMessage('La contraseña debe tener mínimo 8 caracteres'),
+        // TODO: Revisar el uso de esta funcion
+        // .isStrongPassword({
+        //     minUppercase: 1,
+        //     minNumbers: 1
+        // }).withMessage('La contraseña debe tener una mayúscula y un número'),
+        handleInputErrors,
+    AuthController.createAccount
+)
 
 
 export default router
